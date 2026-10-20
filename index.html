@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tramoya · Bernarda Alba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: muro encalado; una columna de "fichas de regiduría" por acto, con barra de actos fija arriba para saltar en la función */
+:root{
+  --bg:#f6f6f2; --surface:#ffffff; --fg:#141413; --muted:#6a6a62; --line:#dcdcd4;
+  --accent:#2f5b3c; --accent-soft:#e3ece4; --change:#7a2e2e; --change-soft:#f3e6e4;
+  --f-display:"Bodoni Moda", "Didot", Georgia, serif;
+  --f-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f0f0e; --surface:#181816; --fg:#ecebe4; --muted:#9a998f; --line:#2c2c28;
+  --accent:#8cc49a; --accent-soft:#1d2b20; --change:#e39a8f; --change-soft:#2e1c1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f0f0e; --surface:#181816; --fg:#ecebe4; --muted:#9a998f; --line:#2c2c28;
+  --accent:#8cc49a; --accent-soft:#1d2b20; --change:#e39a8f; --change-soft:#2e1c1a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--f-body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+header .eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 clamp(32px,7vw,52px)/1.02 var(--f-display);margin:10px 0 8px;text-wrap:balance;letter-spacing:-.01em}
+h1 em{font-weight:500}
+.lede{color:var(--muted);max-width:60ch;margin:0}
+
+nav.acts{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin:22px calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0;padding:10px max(16px,env(safe-area-inset-left,0px));display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav.acts::-webkit-scrollbar{display:none}
+nav.acts a{flex:none;font:500 13px/1 var(--f-mono);color:var(--fg);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:var(--surface)}
+nav.acts a:hover,nav.acts a:focus-visible{border-color:var(--accent);outline:none}
+nav.acts a.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+h2{font:500 13px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:36px 0 12px}
+
+/* Orden de función */
+ol.order{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+ol.order li{border-bottom:1px solid var(--line)}
+ol.order a{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:baseline;padding:12px 4px;color:inherit;text-decoration:none}
+ol.order a:hover .what,ol.order a:focus-visible .what{text-decoration:underline;text-underline-offset:3px}
+ol.order a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.tag{font:500 12px/1 var(--f-mono);color:var(--muted)}
+li.chg .tag{color:var(--change)}
+li.chg .what{font-style:italic}
+.what{min-width:0}
+.time{font:500 14px/1 var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{font-size:13px;color:var(--muted);margin:10px 0 0;max-width:62ch}
+
+/* Fichas */
+section.act{margin-top:40px;scroll-margin-top:calc(64px + env(safe-area-inset-top,0px))}
+.act-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;border-bottom:2px solid var(--fg);padding-bottom:8px}
+.act-head h3{font:700 clamp(26px,5.5vw,36px)/1.05 var(--f-display);margin:0;text-wrap:balance}
+.act-head h3 small{display:block;font:500 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.act-head .time{font-size:16px}
+.block{margin-top:18px}
+.block h4{font:700 13px/1.2 var(--f-body);letter-spacing:.06em;text-transform:uppercase;margin:0 0 8px}
+.keep{font-size:14px;color:var(--muted);margin:0 0 8px}
+.keep b{color:var(--fg);font-weight:700}
+
+ul.check{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+ul.check label{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;padding:9px 10px;border-radius:8px;cursor:pointer}
+ul.check label:hover{background:var(--accent-soft)}
+ul.check input{appearance:none;width:22px;height:22px;margin:1px 0 0;border:2px solid var(--fg);border-radius:4px;display:grid;place-content:center;cursor:pointer;background:var(--surface)}
+ul.check input:checked{background:var(--accent);border-color:var(--accent)}
+ul.check input:checked::after{content:"";width:6px;height:11px;border:solid var(--bg);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+ul.check input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+ul.check input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--muted)}
+
+.refs{display:grid;gap:8px;font-size:15px}
+.refs p{margin:0}
+.refs .k{font:500 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:6px}
+.chips{display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle}
+.chip{font:500 13px/1 var(--f-mono);padding:6px 9px;border-radius:4px;background:var(--fg);color:var(--bg)}
+.music{font-family:var(--f-display);font-style:italic;font-size:18px}
+
+.change{margin-top:22px;background:var(--change-soft);border-radius:10px;padding:14px 14px 10px}
+.change .ch-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;align-items:baseline;margin-bottom:6px}
+.change .ch-head span:first-child{font:500 12px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--change)}
+.change .ch-title{font:500 italic 20px/1.2 var(--f-display);margin:4px 0 8px}
+.change ul.check label:hover{background:color-mix(in srgb,var(--change) 12%,transparent)}
+.change ul.check input:checked{background:var(--change);border-color:var(--change)}
+
+.count{margin-top:10px;font:500 13px/1.3 var(--f-mono);color:var(--fg);background:var(--accent-soft);padding:8px 10px;border-radius:6px}
+
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted)}
+button{font:700 14px/1 var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer}
+button:hover{border-color:var(--fg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.progress{font:500 13px/1 var(--f-mono)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Taller de Teatro · Valverde del Camino</div>
+    <h1>La Casa de <em>Bernarda Alba</em></h1>
+    <p class="lede">Guion técnico de tramoya. Orden de función, música y montaje por actos, con las correcciones de la hoja de regiduría y de dirección. Marca las casillas mientras montas: se guardan solo en tu móvil.</p>
+  </header>
+
+  <nav class="acts" id="nav" aria-label="Ir a un acto"></nav>
+
+  <h2 id="orden">Orden de función</h2>
+  <ol class="order" id="order"></ol>
+  <p class="note">* La hoja escribe «04» con doble prima para La tarara, a diferencia de los minutos del resto de cambios. Se mantiene esa lectura (segundos) sin convertirla a cuatro minutos. Los tiempos son los de la hoja, no tiempos de movimiento calculados.</p>
+
+  <div id="acts"></div>
+
+  <footer>
+    <span class="progress" id="progress"></span>
+    <button type="button" id="reset">Desmarcar todo</button>
+  </footer>
+</div>
+
+<script>
+const ORDER = [
+  {tag:"1º", what:"Duelo", time:"28 min", to:"a1"},
+  {tag:"Tramoya", what:"La tarara", time:"04 seg*", to:"c1", chg:true},
+  {tag:"2º", what:"Cosen · Anda jaleo", time:"15 min", to:"a2"},
+  {tag:"Descanso", what:"Telón y descanso", time:"", to:"c2", chg:true},
+  {tag:"3º", what:"Las rejas · Herida de amor", time:"4 min", to:"a34"},
+  {tag:"4º", what:"El retrato", time:"14 min", to:"a34"},
+  {tag:"Tramoya", what:"Nana del caballo grande (El lagarto)", time:"4 min", to:"c3", chg:true},
+  {tag:"5º", what:"Cena", time:"11 min", to:"a5"},
+  {tag:"Tramoya", what:"Romance de la luna luna", time:"4 min", to:"c4", chg:true},
+  {tag:"6º", what:"Disparo", time:"15 min", to:"a678"},
+  {tag:"7º", what:"Coreografía · Verde que te quiero verde", time:"5 min", to:"a678"},
+  {tag:"8º", what:"Telón y saludo · La leyenda del viento", time:"", to:"a678"},
+];
+
+const ACTS = [
+  { id:"a1", nav:"1 Duelo", label:"Acto 1", title:"Duelo", time:"28 min",
+    blocks:[
+      {h:"Montaje", check:[
+        "Colocar las 15 sillas blancas: 9 tras la tela negra y 6 apiladas en el centro, con una fácil de retirar.",
+        "Colocar las 3 plataformas.",
+        "Colocar el sombrero gris en el perchero y la chaqueta en el galán de noche.",
+        "Guardar las telas dentro del baúl. Colocar las botas delante del baúl.",
+        "Dejar los encajes en el lateral."]},
+    ],
+    refs:{escena:"Abanicos; maltrato a Angustias; «Suave dulzarrona»; Bernarda / Poncia; Martirio / Amelia / Magdalena; entra Adela; María Josefa.",
+          lanz:["Campanas","Golpes","Abaniqueo","Se cae el cubo"]},
+    change:{id:"c1", kind:"Cambio de tramoya", title:"La tarara", time:"04 seg*",
+      keep:"plataformas, tela negra y las 6 sillas del centro.",
+      check:[
+        "Retirar las 9 sillas de detrás de la tela negra. Cambiar 1 blanca del centro por la gris.",
+        "Retirar perchero con sombrero, galán con chaqueta, baúl con telas y botas.",
+        "Dejar preparado el montaje del acto 2."]}
+  },
+  { id:"a2", nav:"2 Cosen", label:"Acto 2", title:"Cosen", time:"15 min",
+    blocks:[
+      {h:"Montaje al inicio del acto", check:[
+        "Permanecen las plataformas y la tela negra.",
+        "Usar las sillas que quedan en el centro, cambiando 1 blanca por la gris: 5 blancas en semicírculo y la sexta gris alejada.",
+        "Colocar la cesta con encajes en un lateral (hay que decidir cuál).",
+        "El lebrillo, la jarra y el taburete están en el escenario desde el principio del acto.",
+        "Retirar todos los demás elementos del acto 1."]},
+    ],
+    refs:{musica:"Anda jaleo", escena:"Todas; Poncia / Adela / Martirio.",
+          lanz:["Almirez","Botella de anís","Pandereta","Cascabeles"]},
+    change:{id:"c2", kind:"Telón y descanso", title:"Cambio de montaje", time:"",
+      keep:"las pasarelas.",
+      check:[
+        "Retirar las sillas del acto 2, cesta con encajes, lebrillo, jarra y taburete.",
+        "Retirar la tela negra y recoger almirez, botella de anís, pandereta y cascabeles.",
+        "Dejar únicamente el montaje común de los actos 3 y 4."]}
+  },
+  { id:"a34", nav:"3–4 Rejas / Retrato", label:"Actos 3 y 4 · mismo montaje", title:"Las rejas / El retrato", time:"4 + 14 min",
+    blocks:[
+      {h:"Montaje de ambos actos", check:[
+        "Permanecen las pasarelas.",
+        "Colocar las 2 rejas y las 2 camas.",
+        "Colocar 2 sillas, una delante de cada reja, enfrentadas.",
+        "Tener los abanicos a mano para la escena 20 del texto.",
+        "Retirar todos los demás elementos del espacio de juego."]},
+    ],
+    refs:{extra:[
+      ["Acto 3 · Las rejas · 4 min","Música: <span class='music'>Herida de amor</span>"],
+      ["Acto 4 · El retrato · 14 min","Martirio / Amelia; entra Bernarda; los velos; maltrato a Martirio; Bernarda / Poncia; cotilleo."]]},
+    change:{id:"c3", kind:"Cambio de tramoya", title:"Nana del caballo grande (El lagarto)", time:"4 min",
+      check:[
+        "Retirar las 2 rejas, las 2 camas y las 2 sillas. Recoger los abanicos.",
+        "Montar la cena con la mesa, su ajuar, el ventanal y las sillas."]}
+  },
+  { id:"a5", nav:"5 Cena", label:"Acto 5", title:"Cena", time:"11 min",
+    blocks:[
+      {h:"Montaje", check:[
+        "Colocar la mesa con todo su ajuar, según las notas de montaje.",
+        "Colocar el ventanal indicado en la hoja.",
+        "Colocar 6 sillas en la mesa: 4 enfrente y 2 que presiden.",
+        "Añadir la silla gris extra: mirando de frente el escenario, a la derecha y un poco más cerca del público que la mesa.",
+        "Bernarda se sienta en la mesa, no en la silla gris. Su sitio es el segundo por la derecha, mirando de frente."],
+       count:"Recuento: 6 sillas de la mesa + 1 silla gris extra = 7 sillas"},
+    ],
+    refs:{escena:"«Estética Leonardo da Vinci»; Poncia / Criada."},
+    change:{id:"c4", kind:"Cambio de tramoya", title:"Romance de la luna luna", time:"4 min",
+      check:[
+        "Recoger todo el ajuar de la mesa.",
+        "Retirar las 6 sillas de la mesa y la silla gris extra.",
+        "Retirar la mesa y el ventanal.",
+        "Retirar cualquier otro elemento de atrezzo."]}
+  },
+  { id:"a678", nav:"6–8 Final", label:"Actos 6, 7 y 8", title:"Disparo, coreografía y saludo", time:"15 + 5 min",
+    blocks:[
+      {h:"Acto 6 · Disparo · 15 min", text:"Montaje: sin atrezzo y sin banco.",
+       refs:{escena:"María Josefa; Martirio / Adela.", lanz:["Disparo"]}},
+      {h:"Acto 7 · Coreografía · 5 min", music:"Verde que te quiero verde", check:[
+        "Colocar el caballo para este acto.",
+        "Retirar el caballo al finalizar el acto."]},
+      {h:"Acto 8 · Telón y saludo", music:"La leyenda del viento", text:"Montaje: no hay atrezzo."},
+    ]
+  },
+];
+
+const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+let n = 0;
+const checklist = (items, prefix) => `<ul class="check">${items.map((t,i)=>{
+  const id = `${prefix}-${i}`; n++;
+  return `<li><label for="${id}"><input type="checkbox" id="${id}"><span>${esc(t)}</span></label></li>`;}).join("")}</ul>`;
+const refsHtml = r => {
+  if(!r) return "";
+  let h = '<div class="refs">';
+  if(r.musica) h += `<p><span class="k">Música</span><span class="music">${esc(r.musica)}</span></p>`;
+  if(r.escena) h += `<p><span class="k">Escena</span>${esc(r.escena)}</p>`;
+  if(r.lanz) h += `<p><span class="k">Lanzamientos</span><span class="chips">${r.lanz.map(l=>`<span class="chip">${esc(l)}</span>`).join("")}</span></p>`;
+  if(r.extra) h += r.extra.map(([k,v])=>`<p><span class="k">${esc(k)}</span><br>${v.includes("<span")?v:esc(v)}</p>`).join("");
+  return h + "</div>";
+};
+
+document.getElementById("nav").innerHTML =
+  `<a href="#orden" data-to="orden">Orden</a>` + ACTS.map(a=>`<a href="#${a.id}" data-to="${a.id}">${esc(a.nav)}</a>`).join("");
+
+document.getElementById("order").innerHTML = ORDER.map(o =>
+  `<li class="${o.chg?"chg":""}"><a href="#${o.to}"><span class="tag">${esc(o.tag)}</span><span class="what">${esc(o.what)}</span><span class="time">${esc(o.time)}</span></a></li>`).join("");
+
+document.getElementById("acts").innerHTML = ACTS.map(a => {
+  let h = `<section class="act" id="${a.id}"><div class="act-head"><h3><small>${esc(a.label)}</small>${esc(a.title)}</h3><span class="time">${esc(a.time)}</span></div>`;
+  a.blocks.forEach((b,bi) => {
+    h += `<div class="block"><h4>${esc(b.h)}</h4>`;
+    if(b.music) h += `<p class="refs" style="margin:0 0 6px"><span><span class="k">Música</span><span class="music">${esc(b.music)}</span></span></p>`;
+    if(b.text) h += `<p style="margin:0 0 6px">${esc(b.text)}</p>`;
+    if(b.check) h += checklist(b.check, `${a.id}-b${bi}`);
+    if(b.count) h += `<div class="count">${esc(b.count)}</div>`;
+    if(b.refs) h += refsHtml(b.refs);
+    h += `</div>`;
+  });
+  if(a.refs) h += `<div class="block"><h4>Referencias de escena</h4>${refsHtml(a.refs)}</div>`;
+  if(a.change){
+    const c = a.change;
+    h += `<div class="change" id="${c.id}"><div class="ch-head"><span>${esc(c.kind)}</span><span class="time">${esc(c.time)}</span></div>
+      <div class="ch-title">${esc(c.title)}</div>
+      ${c.keep?`<p class="keep"><b>Se queda:</b> ${esc(c.keep)}</p>`:""}
+      ${checklist(c.check, c.id)}</div>`;
+  }
+  return h + `</section>`;
+}).join("");
+
+// Casillas: solo en este navegador
+const KEY = "tramoya-bernarda-v1";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e) {}
+const boxes = [...document.querySelectorAll('ul.check input')];
+const progress = document.getElementById("progress");
+const update = () => {
+  const done = boxes.filter(b=>b.checked).length;
+  progress.textContent = `${done} de ${boxes.length} tareas marcadas`;
+};
+boxes.forEach(b => {
+  b.checked = !!state[b.id];
+  b.addEventListener("change", () => {
+    state[b.id] = b.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+    update();
+  });
+});
+document.getElementById("reset").addEventListener("click", () => {
+  boxes.forEach(b => b.checked = false); state = {};
+  try { localStorage.removeItem(KEY); } catch(e) {}
+  update();
+});
+update();
+
+// Resalta el acto visible en la barra
+const links = [...document.querySelectorAll("#nav a")];
+const targets = links.map(l => document.getElementById(l.dataset.to));
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){
+    links.forEach(l => l.classList.toggle("on", l.dataset.to === e.target.id));
+    const on = links.find(l => l.dataset.to === e.target.id);
+    on && on.scrollIntoView({block:"nearest", inline:"nearest"});
+  }});
+}, {rootMargin:"-30% 0px -60% 0px"});
+targets.forEach(t => t && io.observe(t));
+
+const h = location.hash.slice(1);
+if(h && document.getElementById(h)) document.getElementById(h).scrollIntoView();
+</script>
+</body>
+</html>
