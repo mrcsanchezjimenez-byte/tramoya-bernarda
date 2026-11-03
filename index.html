@@ -14,6 +14,7 @@
   --f-display:"Bodoni Moda", "Didot", Georgia, serif;
   --f-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0f0f0e; --surface:#181816; --fg:#ecebe4; --muted:#9a998f; --line:#2c2c28;
@@ -23,9 +24,11 @@
   --accent:#8cc49a; --accent-soft:#1d2b20; --change:#e39a8f; --change-soft:#2e1c1a; color-scheme:dark}
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--f-body);margin:0}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+body.editing .wrap{padding-bottom:120px}
 header .eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 h1{font:700 clamp(32px,7vw,52px)/1.02 var(--f-display);margin:10px 0 8px;text-wrap:balance;letter-spacing:-.01em}
 h1 em{font-weight:500}
@@ -37,12 +40,12 @@ nav.acts a{flex:none;font:500 13px/1 var(--f-mono);color:var(--fg);text-decorati
 nav.acts a:hover,nav.acts a:focus-visible{border-color:var(--accent);outline:none}
 nav.acts a.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 
-h2{font:500 13px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:36px 0 12px}
+h2{font:500 13px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:36px 0 12px;scroll-margin-top:calc(64px + env(safe-area-inset-top,0px))}
 
 /* Orden de función */
 ol.order{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 ol.order li{border-bottom:1px solid var(--line)}
-ol.order a{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:baseline;padding:12px 4px;color:inherit;text-decoration:none}
+ol.order a{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:baseline;padding:12px 4px;color:inherit;text-decoration:none}
 ol.order a:hover .what,ol.order a:focus-visible .what{text-decoration:underline;text-underline-offset:3px}
 ol.order a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tag{font:500 12px/1 var(--f-mono);color:var(--muted)}
@@ -79,7 +82,7 @@ ul.check input:checked + span{color:var(--muted);text-decoration:line-through;te
 .chip{font:500 13px/1 var(--f-mono);padding:6px 9px;border-radius:4px;background:var(--fg);color:var(--bg)}
 .music{font-family:var(--f-display);font-style:italic;font-size:18px}
 
-.change{margin-top:22px;background:var(--change-soft);border-radius:10px;padding:14px 14px 10px}
+.change{margin-top:22px;background:var(--change-soft);border-radius:10px;padding:14px 14px 10px;scroll-margin-top:calc(64px + env(safe-area-inset-top,0px))}
 .change .ch-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;align-items:baseline;margin-bottom:6px}
 .change .ch-head span:first-child{font:500 12px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--change)}
 .change .ch-title{font:500 italic 20px/1.2 var(--f-display);margin:4px 0 8px}
@@ -89,218 +92,522 @@ ul.check input:checked + span{color:var(--muted);text-decoration:line-through;te
 .count{margin-top:10px;font:500 13px/1.3 var(--f-mono);color:var(--fg);background:var(--accent-soft);padding:8px 10px;border-radius:6px}
 
 footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted)}
+.foot-btns{display:flex;flex-wrap:wrap;gap:8px}
 button{font:700 14px/1 var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer}
 button:hover{border-color:var(--fg)}
-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:focus-visible,textarea:focus-visible,select:focus-visible,#tokenInput:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.55;cursor:default}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
 .progress{font:500 13px/1 var(--f-mono)}
+
+/* Entrada al modo edición */
+#tokenPanel{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+#tokenPanel h2{margin:0 0 10px}
+#tokenPanel ol{margin:0 0 12px;padding-left:20px;display:grid;gap:6px;font-size:15px}
+#tokenPanel a{color:var(--accent)}
+#tokenPanel label{display:block;font-size:14px;font-weight:700;margin-bottom:6px}
+#tokenInput{width:100%;font:500 14px/1.4 var(--f-mono);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px}
+.t-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.err{color:var(--change);font-size:14px;margin:10px 0 0}
+.small{font-size:13px;color:var(--muted);margin:10px 0 0}
+
+/* Formulario de edición */
+.f{display:block;margin-top:10px;min-width:0}
+.f > span,.lab{display:block;font:500 11px/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+textarea,select{width:100%;font:16px/1.4 var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+textarea{display:block;resize:none;overflow:hidden}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 10px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:start;margin-top:6px}
+.tools{display:flex;gap:2px}
+.tools button,.mini{font-size:13px;font-weight:700;padding:8px 10px;border-radius:6px;min-width:34px}
+.adds{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.danger{color:var(--change)}
+.ed-block{margin-top:18px;padding-top:14px;border-top:1px dashed var(--line)}
+.ed-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between;margin-bottom:4px}
+.ed-bar b{font:700 13px/1.2 var(--f-body);letter-spacing:.06em;text-transform:uppercase}
+.change textarea{background:var(--bg)}
+.ord-row{padding:10px 0;border-bottom:1px solid var(--line)}
+.ord-grid{display:grid;grid-template-columns:90px minmax(0,1fr) 90px;gap:6px 8px}
+.ord-grid .f{margin-top:0}
+.ord-foot{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin-top:8px;font-size:14px}
+.ord-foot select{width:auto;max-width:100%;padding:6px 8px;font-size:14px}
+.ord-foot label{display:flex;gap:6px;align-items:center}
+@media (max-width:520px){.ord-grid{grid-template-columns:minmax(0,1fr) 90px}.ord-grid .f-what{grid-column:1 / -1;grid-row:2}}
+
+#saveBar{position:fixed;left:0;right:0;bottom:0;z-index:8;background:var(--surface);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+#saveBar .in{max-width:728px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#saveStatus{flex:1 1 200px;font-size:14px;min-width:0}
+#saveStatus.bad{color:var(--change)}
+#saveStatus.ok{color:var(--accent)}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 </style>
 </head>
 <body>
-
 <div class="wrap">
   <header>
-    <div class="eyebrow">Taller de Teatro · Valverde del Camino</div>
+    <div class="eyebrow" id="eyebrow">Taller de Teatro · Valverde del Camino</div>
     <h1>La Casa de <em>Bernarda Alba</em></h1>
-    <p class="lede">Guion técnico de tramoya. Orden de función, música y montaje por actos, con las correcciones de la hoja de regiduría y de dirección. Marca las casillas mientras montas: se guardan solo en tu móvil.</p>
+    <p class="lede" id="lede"></p>
   </header>
+
+  <section id="tokenPanel" hidden aria-labelledby="tokenTitle">
+    <h2 id="tokenTitle">Entrar a editar</h2>
+    <ol>
+      <li><a id="tokenLink" href="https://github.com/settings/personal-access-tokens/new?name=Editar%20tramoya&amp;description=Editar%20la%20web%20de%20tramoya&amp;expires_in=90&amp;contents=write" target="_blank" rel="noopener">Crea una llave en GitHub</a> (se abre otra pestaña).</li>
+      <li>En «Repository access» elige «Only select repositories» y marca <b>tramoya-bernarda</b>.</li>
+      <li>En «Permissions», comprueba que «Contents» está en «Read and write». Genera la llave y cópiala.</li>
+    </ol>
+    <form id="tokenForm">
+      <label for="tokenInput">Pega aquí tu llave</label>
+      <input id="tokenInput" type="password" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="t-actions">
+        <button class="primary" type="submit" id="tokenGo">Entrar</button>
+        <button type="button" id="tokenCancel">Cancelar</button>
+      </div>
+    </form>
+    <p class="err" id="tokenErr" role="alert" hidden></p>
+    <p class="small">La llave se guarda solo en este navegador. No la compartas: quien la tenga puede cambiar la web.</p>
+  </section>
 
   <nav class="acts" id="nav" aria-label="Ir a un acto"></nav>
 
-  <h2 id="orden">Orden de función</h2>
-  <ol class="order" id="order"></ol>
-  <p class="note">* La hoja escribe «04» con doble prima para La tarara, a diferencia de los minutos del resto de cambios. Se mantiene esa lectura (segundos) sin convertirla a cuatro minutos. Los tiempos son los de la hoja, no tiempos de movimiento calculados.</p>
+  <main id="main"><p class="note">Cargando el guion…</p></main>
 
-  <div id="acts"></div>
-
-  <footer>
+  <footer id="foot">
     <span class="progress" id="progress"></span>
-    <button type="button" id="reset">Desmarcar todo</button>
+    <span class="foot-btns">
+      <button type="button" id="editBtn" hidden>Editar</button>
+      <button type="button" id="reset">Desmarcar todo</button>
+    </span>
   </footer>
 </div>
 
+<div id="saveBar" hidden>
+  <div class="in">
+    <span id="saveStatus" role="status" aria-live="polite"></span>
+    <button type="button" id="logout" class="mini">Olvidar llave</button>
+    <button type="button" id="exitEdit">Salir</button>
+    <button type="button" id="save" class="primary">Guardar y publicar</button>
+  </div>
+</div>
+
 <script>
-const ORDER = [
-  {tag:"1º", what:"Duelo", time:"28 min", to:"a1"},
-  {tag:"Tramoya", what:"La tarara", time:"04 seg*", to:"c1", chg:true},
-  {tag:"2º", what:"Cosen · Anda jaleo", time:"15 min", to:"a2"},
-  {tag:"Descanso", what:"Telón y descanso", time:"", to:"c2", chg:true},
-  {tag:"3º", what:"Las rejas · Herida de amor", time:"4 min", to:"a34"},
-  {tag:"4º", what:"El retrato", time:"14 min", to:"a34"},
-  {tag:"Tramoya", what:"Nana del caballo grande (El lagarto)", time:"4 min", to:"c3", chg:true},
-  {tag:"5º", what:"Cena", time:"11 min", to:"a5"},
-  {tag:"Tramoya", what:"Romance de la luna luna", time:"4 min", to:"c4", chg:true},
-  {tag:"6º", what:"Disparo", time:"15 min", to:"a678"},
-  {tag:"7º", what:"Coreografía · Verde que te quiero verde", time:"5 min", to:"a678"},
-  {tag:"8º", what:"Telón y saludo · La leyenda del viento", time:"", to:"a678"},
-];
+const REPO = "mrcsanchezjimenez-byte/tramoya-bernarda";
+const API = `https://api.github.com/repos/${REPO}/contents/datos.json`;
+const KEY = "tramoya-bernarda-v2";
+const TOKEN_KEY = "tramoya-bernarda-llave";
 
-const ACTS = [
-  { id:"a1", nav:"1 Duelo", label:"Acto 1", title:"Duelo", time:"28 min",
-    blocks:[
-      {h:"Montaje", check:[
-        "Colocar las 15 sillas blancas: 9 tras la tela negra y 6 apiladas en el centro, con una fácil de retirar.",
-        "Colocar las 3 plataformas.",
-        "Colocar el sombrero gris en el perchero y la chaqueta en el galán de noche.",
-        "Guardar las telas dentro del baúl. Colocar las botas delante del baúl.",
-        "Dejar los encajes en el lateral."]},
-    ],
-    refs:{escena:"Abanicos; maltrato a Angustias; «Suave dulzarrona»; Bernarda / Poncia; Martirio / Amelia / Magdalena; entra Adela; María Josefa.",
-          lanz:["Campanas","Golpes","Abaniqueo","Se cae el cubo"]},
-    change:{id:"c1", kind:"Cambio de tramoya", title:"La tarara", time:"04 seg*",
-      keep:"plataformas, tela negra y las 6 sillas del centro.",
-      check:[
-        "Retirar las 9 sillas de detrás de la tela negra. Cambiar 1 blanca del centro por la gris.",
-        "Retirar perchero con sombrero, galán con chaqueta, baúl con telas y botas.",
-        "Dejar preparado el montaje del acto 2."]}
-  },
-  { id:"a2", nav:"2 Cosen", label:"Acto 2", title:"Cosen", time:"15 min",
-    blocks:[
-      {h:"Montaje al inicio del acto", check:[
-        "Permanecen las plataformas y la tela negra.",
-        "Usar las sillas que quedan en el centro, cambiando 1 blanca por la gris: 5 blancas en semicírculo y la sexta gris alejada.",
-        "Colocar la cesta con encajes en un lateral (hay que decidir cuál).",
-        "El lebrillo, la jarra y el taburete están en el escenario desde el principio del acto.",
-        "Retirar todos los demás elementos del acto 1."]},
-    ],
-    refs:{musica:"Anda jaleo", escena:"Todas; Poncia / Adela / Martirio.",
-          lanz:["Almirez","Botella de anís","Pandereta","Cascabeles"]},
-    change:{id:"c2", kind:"Telón y descanso", title:"Cambio de montaje", time:"",
-      keep:"las pasarelas.",
-      check:[
-        "Retirar las sillas del acto 2, cesta con encajes, lebrillo, jarra y taburete.",
-        "Retirar la tela negra y recoger almirez, botella de anís, pandereta y cascabeles.",
-        "Dejar únicamente el montaje común de los actos 3 y 4."]}
-  },
-  { id:"a34", nav:"3–4 Rejas / Retrato", label:"Actos 3 y 4 · mismo montaje", title:"Las rejas / El retrato", time:"4 + 14 min",
-    blocks:[
-      {h:"Montaje de ambos actos", check:[
-        "Permanecen las pasarelas.",
-        "Colocar las 2 rejas y las 2 camas.",
-        "Colocar 2 sillas, una delante de cada reja, enfrentadas.",
-        "Tener los abanicos a mano para la escena 20 del texto.",
-        "Retirar todos los demás elementos del espacio de juego."]},
-    ],
-    refs:{extra:[
-      ["Acto 3 · Las rejas · 4 min","Música: <span class='music'>Herida de amor</span>"],
-      ["Acto 4 · El retrato · 14 min","Martirio / Amelia; entra Bernarda; los velos; maltrato a Martirio; Bernarda / Poncia; cotilleo."]]},
-    change:{id:"c3", kind:"Cambio de tramoya", title:"Nana del caballo grande (El lagarto)", time:"4 min",
-      check:[
-        "Retirar las 2 rejas, las 2 camas y las 2 sillas. Recoger los abanicos.",
-        "Montar la cena con la mesa, su ajuar, el ventanal y las sillas."]}
-  },
-  { id:"a5", nav:"5 Cena", label:"Acto 5", title:"Cena", time:"11 min",
-    blocks:[
-      {h:"Montaje", check:[
-        "Colocar la mesa con todo su ajuar, según las notas de montaje.",
-        "Colocar el ventanal indicado en la hoja.",
-        "Colocar 6 sillas en la mesa: 4 enfrente y 2 que presiden.",
-        "Añadir la silla gris extra: mirando de frente el escenario, a la derecha y un poco más cerca del público que la mesa.",
-        "Bernarda se sienta en la mesa, no en la silla gris. Su sitio es el segundo por la derecha, mirando de frente."],
-       count:"Recuento: 6 sillas de la mesa + 1 silla gris extra = 7 sillas"},
-    ],
-    refs:{escena:"«Estética Leonardo da Vinci»; Poncia / Criada."},
-    change:{id:"c4", kind:"Cambio de tramoya", title:"Romance de la luna luna", time:"4 min",
-      check:[
-        "Recoger todo el ajuar de la mesa.",
-        "Retirar las 6 sillas de la mesa y la silla gris extra.",
-        "Retirar la mesa y el ventanal.",
-        "Retirar cualquier otro elemento de atrezzo."]}
-  },
-  { id:"a678", nav:"6–8 Final", label:"Actos 6, 7 y 8", title:"Disparo, coreografía y saludo", time:"15 + 5 min",
-    blocks:[
-      {h:"Acto 6 · Disparo · 15 min", text:"Montaje: sin atrezzo y sin banco.",
-       refs:{escena:"María Josefa; Martirio / Adela.", lanz:["Disparo"]}},
-      {h:"Acto 7 · Coreografía · 5 min", music:"Verde que te quiero verde", check:[
-        "Colocar el caballo para este acto.",
-        "Retirar el caballo al finalizar el acto."]},
-      {h:"Acto 8 · Telón y saludo", music:"La leyenda del viento", text:"Montaje: no hay atrezzo."},
-    ]
-  },
-];
-
-const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-let n = 0;
-const checklist = (items, prefix) => `<ul class="check">${items.map((t,i)=>{
-  const id = `${prefix}-${i}`; n++;
-  return `<li><label for="${id}"><input type="checkbox" id="${id}"><span>${esc(t)}</span></label></li>`;}).join("")}</ul>`;
-const refsHtml = r => {
-  if(!r) return "";
-  let h = '<div class="refs">';
-  if(r.musica) h += `<p><span class="k">Música</span><span class="music">${esc(r.musica)}</span></p>`;
-  if(r.escena) h += `<p><span class="k">Escena</span>${esc(r.escena)}</p>`;
-  if(r.lanz) h += `<p><span class="k">Lanzamientos</span><span class="chips">${r.lanz.map(l=>`<span class="chip">${esc(l)}</span>`).join("")}</span></p>`;
-  if(r.extra) h += r.extra.map(([k,v])=>`<p><span class="k">${esc(k)}</span><br>${v.includes("<span")?v:esc(v)}</p>`).join("");
-  return h + "</div>";
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch(e) { return null; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch(e) {} },
+  del(k){ try { localStorage.removeItem(k); } catch(e) {} },
 };
 
-document.getElementById("nav").innerHTML =
-  `<a href="#orden" data-to="orden">Orden</a>` + ACTS.map(a=>`<a href="#${a.id}" data-to="${a.id}">${esc(a.nav)}</a>`).join("");
+let data = null, sha = null, editing = false, dirty = false, saving = false, observer = null;
 
-document.getElementById("order").innerHTML = ORDER.map(o =>
-  `<li class="${o.chg?"chg":""}"><a href="#${o.to}"><span class="tag">${esc(o.tag)}</span><span class="what">${esc(o.what)}</span><span class="time">${esc(o.time)}</span></a></li>`).join("");
-
-document.getElementById("acts").innerHTML = ACTS.map(a => {
-  let h = `<section class="act" id="${a.id}"><div class="act-head"><h3><small>${esc(a.label)}</small>${esc(a.title)}</h3><span class="time">${esc(a.time)}</span></div>`;
-  a.blocks.forEach((b,bi) => {
-    h += `<div class="block"><h4>${esc(b.h)}</h4>`;
-    if(b.music) h += `<p class="refs" style="margin:0 0 6px"><span><span class="k">Música</span><span class="music">${esc(b.music)}</span></span></p>`;
-    if(b.text) h += `<p style="margin:0 0 6px">${esc(b.text)}</p>`;
-    if(b.check) h += checklist(b.check, `${a.id}-b${bi}`);
-    if(b.count) h += `<div class="count">${esc(b.count)}</div>`;
-    if(b.refs) h += refsHtml(b.refs);
-    h += `</div>`;
-  });
-  if(a.refs) h += `<div class="block"><h4>Referencias de escena</h4>${refsHtml(a.refs)}</div>`;
-  if(a.change){
-    const c = a.change;
-    h += `<div class="change" id="${c.id}"><div class="ch-head"><span>${esc(c.kind)}</span><span class="time">${esc(c.time)}</span></div>
-      <div class="ch-title">${esc(c.title)}</div>
-      ${c.keep?`<p class="keep"><b>Se queda:</b> ${esc(c.keep)}</p>`:""}
-      ${checklist(c.check, c.id)}</div>`;
-  }
-  return h + `</section>`;
-}).join("");
-
-// Casillas: solo en este navegador
-const KEY = "tramoya-bernarda-v1";
+// ---------- Vista normal ----------
 let state = {};
-try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e) {}
-const boxes = [...document.querySelectorAll('ul.check input')];
-const progress = document.getElementById("progress");
-const update = () => {
-  const done = boxes.filter(b=>b.checked).length;
-  progress.textContent = `${done} de ${boxes.length} tareas marcadas`;
-};
-boxes.forEach(b => {
-  b.checked = !!state[b.id];
-  b.addEventListener("change", () => {
-    state[b.id] = b.checked;
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
-    update();
-  });
-});
-document.getElementById("reset").addEventListener("click", () => {
-  boxes.forEach(b => b.checked = false); state = {};
-  try { localStorage.removeItem(KEY); } catch(e) {}
-  update();
-});
-update();
+try { state = JSON.parse(store.get(KEY) || "{}"); } catch(e) {}
+let uid = 0;
+
+const checklist = (items, prefix) => `<ul class="check">${(items||[]).map(t => {
+  const id = `c${uid++}`;
+  return `<li><label for="${id}"><input type="checkbox" id="${id}" data-key="${esc(prefix + "|" + t)}"><span>${esc(t)}</span></label></li>`;
+}).join("")}</ul>`;
+
+function blockView(b, prefix){
+  let h = `<div class="block">${b.h ? `<h4>${esc(b.h)}</h4>` : ""}`;
+  if(b.text) h += `<p style="margin:0 0 6px">${esc(b.text)}</p>`;
+  if(b.check) h += checklist(b.check, prefix);
+  if(b.count) h += `<div class="count">${esc(b.count)}</div>`;
+  if(b.music || b.escena || b.lanz){
+    h += `<div class="refs">`;
+    if(b.music) h += `<p><span class="k">Música</span><span class="music">${esc(b.music)}</span></p>`;
+    if(b.escena) h += `<p><span class="k">Escena</span>${esc(b.escena)}</p>`;
+    if(b.lanz) h += `<p><span class="k">Lanzamientos</span><span class="chips">${b.lanz.map(l => `<span class="chip">${esc(l)}</span>`).join("")}</span></p>`;
+    h += `</div>`;
+  }
+  return h + `</div>`;
+}
+
+function renderView(){
+  const m = data.meta || {};
+  $("main").innerHTML = `
+    <h2 id="orden">Orden de función</h2>
+    <ol class="order">${(data.order||[]).map(o =>
+      `<li class="${o.chg ? "chg" : ""}"><a href="#${esc(o.to)}"><span class="tag">${esc(o.tag)}</span><span class="what">${esc(o.what)}</span><span class="time">${esc(o.time)}</span></a></li>`).join("")}</ol>
+    ${m.nota ? `<p class="note">${esc(m.nota)}</p>` : ""}
+    ${(data.acts||[]).map(a => {
+      let h = `<section class="act" id="${esc(a.id)}"><div class="act-head"><h3><small>${esc(a.label)}</small>${esc(a.title)}</h3><span class="time">${esc(a.time)}</span></div>`;
+      (a.blocks||[]).forEach(b => h += blockView(b, a.id));
+      if(a.change){
+        const c = a.change;
+        h += `<div class="change" id="${esc(c.id)}"><div class="ch-head"><span>${esc(c.kind)}</span><span class="time">${esc(c.time)}</span></div>
+          <div class="ch-title">${esc(c.title)}</div>
+          ${c.keep ? `<p class="keep"><b>Se queda:</b> ${esc(c.keep)}</p>` : ""}
+          ${checklist(c.check, c.id)}</div>`;
+      }
+      return h + `</section>`;
+    }).join("")}`;
+
+  document.querySelectorAll("ul.check input").forEach(b => { b.checked = !!state[b.dataset.key]; });
+  updateProgress();
+}
+
+function updateProgress(){
+  const boxes = [...document.querySelectorAll("ul.check input")];
+  $("progress").textContent = `${boxes.filter(b => b.checked).length} de ${boxes.length} tareas marcadas`;
+}
+
+function renderChrome(){
+  const m = data.meta || {};
+  $("eyebrow").textContent = m.eyebrow || "";
+  $("lede").textContent = m.lede || "";
+  $("nav").innerHTML = `<a href="#orden" data-to="orden">Orden</a>` +
+    (data.acts||[]).map(a => `<a href="#${esc(a.id)}" data-to="${esc(a.id)}">${esc(a.nav)}</a>`).join("");
+  watchNav();
+}
 
 // Resalta el acto visible en la barra
-const links = [...document.querySelectorAll("#nav a")];
-const targets = links.map(l => document.getElementById(l.dataset.to));
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting){
-    links.forEach(l => l.classList.toggle("on", l.dataset.to === e.target.id));
-    const on = links.find(l => l.dataset.to === e.target.id);
-    on && on.scrollIntoView({block:"nearest", inline:"nearest"});
-  }});
-}, {rootMargin:"-30% 0px -60% 0px"});
-targets.forEach(t => t && io.observe(t));
+function watchNav(){
+  if(observer) observer.disconnect();
+  const links = [...document.querySelectorAll("#nav a")];
+  observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){
+      links.forEach(l => l.classList.toggle("on", l.dataset.to === e.target.id));
+      const on = links.find(l => l.dataset.to === e.target.id);
+      if(on) $("nav").scrollLeft = on.offsetLeft - 16;
+    }});
+  }, {rootMargin:"-30% 0px -60% 0px"});
+  links.forEach(l => { const t = $(l.dataset.to); if(t) observer.observe(t); });
+}
 
-const h = location.hash.slice(1);
-if(h && document.getElementById(h)) document.getElementById(h).scrollIntoView();
+function render(){
+  renderChrome();
+  if(editing) renderEdit(); else renderView();
+  watchNav();
+}
+
+$("main").addEventListener("change", e => {
+  if(editing || !e.target.matches("ul.check input")) return;
+  state[e.target.dataset.key] = e.target.checked;
+  store.set(KEY, JSON.stringify(state));
+  updateProgress();
+});
+$("reset").addEventListener("click", () => {
+  document.querySelectorAll("ul.check input").forEach(b => b.checked = false);
+  state = {}; store.del(KEY); updateProgress();
+});
+
+// ---------- Formulario de edición ----------
+const getP = path => path.split(".").reduce((o,k) => o == null ? o : o[k], data);
+function parentOf(path){
+  const p = path.split("."); const k = p.pop();
+  return [p.reduce((o,x) => o[x], data), k];
+}
+const field = (path, label, cls = "") =>
+  `<label class="f ${cls}"><span>${esc(label)}</span><textarea id="e-${path}" data-path="${path}" rows="1">${esc(getP(path))}</textarea></label>`;
+const btn = (label, what, path, extra = "", aria = "") =>
+  `<button type="button" class="mini ${extra.startsWith("danger") ? "danger" : ""}" data-do="${what}" data-path="${path}"${aria ? ` aria-label="${esc(aria)}"` : ""}>${esc(label)}</button>`;
+const moveTools = (path, what) => `<div class="tools">
+    ${btn("↑", "up", path, "", `Subir ${what}`)}${btn("↓", "down", path, "", `Bajar ${what}`)}${btn("✕", "del", path, "danger", `Borrar ${what}`)}
+  </div>`;
+function listEdit(path, label, addLabel, what){
+  const arr = getP(path) || [];
+  return `<div class="f"><span class="lab">${esc(label)}</span>${arr.map((_,i) =>
+    `<div class="row"><textarea id="e-${path}.${i}" data-path="${path}.${i}" rows="1" aria-label="${esc(what)} ${i+1}">${esc(arr[i])}</textarea>${moveTools(`${path}.${i}`, what)}</div>`).join("")}
+    <div class="adds">${`<button type="button" class="mini" data-do="push" data-path="${path}" data-val='""'>${esc(addLabel)}</button>`}</div></div>`;
+}
+function optional(path, key, label){
+  return getP(`${path}.${key}`) === undefined
+    ? `<button type="button" class="mini" data-do="set" data-path="${path}.${key}" data-val='""'>+ ${esc(label)}</button>` : "";
+}
+function blockEdit(path){
+  const b = getP(path);
+  let h = `<div class="ed-block"><div class="ed-bar"><b>Bloque</b>${moveTools(path, "bloque")}</div>`;
+  h += field(`${path}.h`, "Título del bloque");
+  if(b.text !== undefined) h += field(`${path}.text`, "Nota");
+  if(b.check !== undefined) h += listEdit(`${path}.check`, "Tareas", "+ Añadir tarea", "tarea");
+  if(b.count !== undefined) h += field(`${path}.count`, "Recuento");
+  if(b.music !== undefined) h += field(`${path}.music`, "Música");
+  if(b.escena !== undefined) h += field(`${path}.escena`, "Escena");
+  if(b.lanz !== undefined) h += listEdit(`${path}.lanz`, "Lanzamientos", "+ Añadir lanzamiento", "lanzamiento");
+  const adds = [
+    optional(path, "text", "Nota"),
+    b.check === undefined ? `<button type="button" class="mini" data-do="push" data-path="${path}.check" data-val='""'>+ Tareas</button>` : "",
+    optional(path, "count", "Recuento"),
+    optional(path, "music", "Música"),
+    optional(path, "escena", "Escena"),
+    b.lanz === undefined ? `<button type="button" class="mini" data-do="push" data-path="${path}.lanz" data-val='""'>+ Lanzamientos</button>` : "",
+  ].join("");
+  if(adds) h += `<div class="adds">${adds}</div>`;
+  return h + `</div>`;
+}
+function targets(){
+  const out = [];
+  (data.acts||[]).forEach(a => {
+    out.push([a.id, a.title || a.id]);
+    if(a.change) out.push([a.change.id, `Cambio: ${a.change.title || a.change.id}`]);
+  });
+  return out;
+}
+function renderEdit(){
+  const tg = targets();
+  const order = (data.order||[]).map((o,i) => {
+    const p = `order.${i}`;
+    return `<div class="ord-row"><div class="ord-grid">
+        ${field(`${p}.tag`, "Etiqueta")}${field(`${p}.what`, "Qué", "f-what")}${field(`${p}.time`, "Tiempo")}
+      </div><div class="ord-foot">
+        <label>Lleva a <select id="e-${p}.to" data-path="${p}.to">
+          ${tg.some(t => t[0] === o.to) ? "" : `<option value="${esc(o.to)}" selected>Sin destino</option>`}
+          ${tg.map(t => `<option value="${esc(t[0])}"${t[0] === o.to ? " selected" : ""}>${esc(t[1])}</option>`).join("")}
+        </select></label>
+        <label><input type="checkbox" id="e-${p}.chg" data-path="${p}.chg"${o.chg ? " checked" : ""}> Es un cambio</label>
+        ${moveTools(p, "fila")}
+      </div></div>`;
+  }).join("");
+
+  $("main").innerHTML = `
+    <h2>Textos generales</h2>
+    ${field("meta.eyebrow", "Encabezado")}${field("meta.lede", "Presentación")}${field("meta.nota", "Nota bajo el orden de función")}
+    <h2 id="orden">Orden de función</h2>
+    ${order}
+    <div class="adds"><button type="button" class="mini" data-do="push" data-path="order" data-val='{"tag":"","what":"","time":"","to":""}'>+ Añadir fila</button></div>
+    ${(data.acts||[]).map((a,i) => {
+      const p = `acts.${i}`;
+      let h = `<section class="act" id="${esc(a.id)}"><div class="act-head"><h3><small>Ficha ${i+1}</small>${esc(a.title || "Sin título")}</h3>${moveTools(p, "ficha")}</div>
+        <div class="grid2">${field(`${p}.label`, "Antetítulo")}${field(`${p}.title`, "Título")}${field(`${p}.time`, "Tiempo")}${field(`${p}.nav`, "Nombre en la barra")}</div>`;
+      (a.blocks||[]).forEach((_,bi) => h += blockEdit(`${p}.blocks.${bi}`));
+      h += `<div class="adds"><button type="button" class="mini" data-do="push" data-path="${p}.blocks" data-val='{"h":"","check":[""]}'>+ Añadir bloque</button></div>`;
+      if(a.change){
+        const c = `${p}.change`;
+        h += `<div class="change" id="${esc(a.change.id)}"><div class="ed-bar"><b>Cambio tras esta ficha</b>${btn("Quitar cambio", "del", c, "danger")}</div>
+          <div class="grid2">${field(`${c}.kind`, "Tipo")}${field(`${c}.title`, "Título")}${field(`${c}.time`, "Tiempo")}</div>
+          ${a.change.keep !== undefined ? field(`${c}.keep`, "Se queda") : `<div class="adds">${optional(c, "keep", "Se queda")}</div>`}
+          ${listEdit(`${c}.check`, "Tareas", "+ Añadir tarea", "tarea")}</div>`;
+      } else {
+        h += `<div class="adds"><button type="button" class="mini" data-do="newchange" data-path="${p}">+ Añadir cambio tras esta ficha</button></div>`;
+      }
+      return h + `</section>`;
+    }).join("")}
+    <div class="adds" style="margin-top:24px"><button type="button" class="mini" data-do="newact">+ Añadir ficha de acto</button></div>`;
+
+  document.querySelectorAll("#main textarea").forEach(grow);
+}
+function grow(t){ t.style.height = "auto"; t.style.height = t.scrollHeight + 2 + "px"; }
+// Si cambia el ancho (girar el móvil, redimensionar) o llegan las fuentes, recalcula las alturas
+let lastW = 0;
+const growAll = () => { if(editing) document.querySelectorAll("#main textarea").forEach(grow); };
+new ResizeObserver(() => { const w = $("main").clientWidth; if(w !== lastW){ lastW = w; growAll(); } }).observe($("main"));
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(growAll);
+
+function setDirty(){
+  dirty = true;
+  const s = $("saveStatus"); s.className = ""; s.textContent = "Hay cambios sin guardar.";
+}
+$("main").addEventListener("input", e => {
+  if(!editing || !e.target.dataset.path) return;
+  const [o,k] = parentOf(e.target.dataset.path);
+  if(e.target.type === "checkbox") { if(e.target.checked) o[k] = true; else delete o[k]; }
+  else o[k] = e.target.value;
+  if(e.target.tagName === "TEXTAREA") grow(e.target);
+  setDirty();
+});
+$("main").addEventListener("change", e => {
+  // Los select y checkbox de algunos navegadores solo avisan con change
+  if(!editing || !e.target.dataset.path || e.target.tagName === "TEXTAREA") return;
+  const [o,k] = parentOf(e.target.dataset.path);
+  if(e.target.type === "checkbox") { if(e.target.checked) o[k] = true; else delete o[k]; }
+  else o[k] = e.target.value;
+  setDirty();
+});
+$("main").addEventListener("click", e => {
+  const b = e.target.closest("button[data-do]");
+  if(!b || !editing) return;
+  const {do:what, path, val} = b.dataset;
+  let focus = null;
+  if(what === "del"){
+    if(/^acts\.\d+$/.test(path) && !confirm("¿Borrar esta ficha entera?")) return;
+    const [o,k] = parentOf(path);
+    if(Array.isArray(o)) o.splice(+k, 1); else delete o[k];
+  } else if(what === "up" || what === "down"){
+    const [o,k] = parentOf(path);
+    const i = +k, j = what === "up" ? i - 1 : i + 1;
+    if(j < 0 || j >= o.length) return;
+    [o[i], o[j]] = [o[j], o[i]];
+  } else if(what === "set"){
+    const [o,k] = parentOf(path);
+    o[k] = JSON.parse(val);
+    focus = path;
+  } else if(what === "push"){
+    const [o,k] = parentOf(path);
+    if(!Array.isArray(o[k])) o[k] = [];
+    o[k].push(JSON.parse(val));
+    focus = `${path}.${o[k].length - 1}`;
+  } else if(what === "newchange"){
+    getP(path).change = {id:`c${Date.now()}`, kind:"Cambio de tramoya", title:"", time:"", check:[""]};
+    focus = `${path}.change.title`;
+  } else if(what === "newact"){
+    data.acts = data.acts || [];
+    data.acts.push({id:`a${Date.now()}`, nav:"Nuevo", label:"Acto", title:"", time:"", blocks:[{h:"Montaje", check:[""]}]});
+    focus = `acts.${data.acts.length - 1}.title`;
+  }
+  const y = window.scrollY;
+  render();
+  window.scrollTo({top:y, behavior:"instant"});
+  setDirty();
+  if(focus){
+    const el = document.querySelector(`[data-path="${focus}"]`) ||
+               document.querySelector(`[data-path="${focus}.h"]`) ||
+               document.querySelector(`[data-path="${focus}.what"]`);
+    if(el) el.focus();
+  }
+});
+
+// Quita campos vacíos para que no aparezcan en la vista normal
+function clean(v){
+  if(Array.isArray(v)) return v.map(clean).filter(x => x !== "" && x !== undefined);
+  if(v && typeof v === "object"){
+    const out = {};
+    Object.entries(v).forEach(([k,x]) => {
+      const c = clean(x);
+      if(c === "" || c === undefined || (Array.isArray(c) && !c.length)) return;
+      out[k] = c;
+    });
+    return out;
+  }
+  return typeof v === "string" ? v.trim() : v;
+}
+
+// ---------- GitHub ----------
+const toB64 = s => { let b = ""; new TextEncoder().encode(s).forEach(c => b += String.fromCharCode(c)); return btoa(b); };
+const fromB64 = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,"")), c => c.charCodeAt(0)));
+const gh = (token, opts = {}) => fetch(API, {
+  cache:"no-store", ...opts,
+  headers:{Accept:"application/vnd.github+json", Authorization:`Bearer ${token}`, ...(opts.headers||{})},
+});
+
+function showToken(msg){
+  $("tokenPanel").hidden = false;
+  $("tokenErr").hidden = !msg;
+  $("tokenErr").textContent = msg || "";
+  $("tokenInput").focus();
+  $("tokenPanel").scrollIntoView({block:"nearest"});
+}
+
+async function enterEdit(token){
+  $("tokenGo").disabled = true;
+  try {
+    const r = await gh(token);
+    if(r.status === 401 || r.status === 403 || r.status === 404){
+      store.del(TOKEN_KEY);
+      showToken("Esa llave no sirve o ha caducado. Crea una nueva y comprueba que tiene acceso a tramoya-bernarda.");
+      return;
+    }
+    if(!r.ok) throw new Error(r.status);
+    const j = await r.json();
+    data = JSON.parse(fromB64(j.content));
+    sha = j.sha;
+    store.set(TOKEN_KEY, token);
+    editing = true; dirty = false;
+    document.body.classList.add("editing");
+    $("tokenPanel").hidden = true;
+    $("tokenInput").value = "";
+    $("saveBar").hidden = false;
+    $("foot").hidden = true;
+    $("saveStatus").className = ""; $("saveStatus").textContent = "Modo edición. Nadie ve los cambios hasta que guardes.";
+    render();
+  } catch(e) {
+    showToken("No he podido conectar con GitHub. Comprueba la conexión e inténtalo de nuevo.");
+  } finally {
+    $("tokenGo").disabled = false;
+  }
+}
+function startEdit(){
+  const t = store.get(TOKEN_KEY);
+  if(t) enterEdit(t); else showToken();
+}
+function exitEdit(){
+  if(dirty && !confirm("Tienes cambios sin guardar. ¿Salir y perderlos?")) return;
+  editing = false; dirty = false;
+  document.body.classList.remove("editing");
+  $("saveBar").hidden = true; $("foot").hidden = false;
+  if(location.hash === "#editar") history.replaceState(null, "", location.pathname);
+  loadData();
+}
+
+async function save(){
+  if(saving) return;
+  const token = store.get(TOKEN_KEY);
+  const s = $("saveStatus");
+  if(!token){ s.className = "bad"; s.textContent = "No hay llave guardada. Copia tus cambios, sal y vuelve a entrar."; return; }
+  saving = true; $("save").disabled = true;
+  s.className = ""; s.textContent = "Guardando…";
+  try {
+    const cleaned = clean(data);
+    const r = await gh(token, {
+      method:"PUT",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:"Edición desde la web", content:toB64(JSON.stringify(cleaned, null, 2) + "\n"), sha, branch:"main"}),
+    });
+    if(r.ok){
+      const j = await r.json();
+      sha = j.content.sha; data = cleaned; dirty = false;
+      const y = window.scrollY; render(); window.scrollTo({top:y, behavior:"instant"});
+      s.className = "ok"; s.textContent = "Guardado. El elenco lo verá en un par de minutos.";
+    } else if(r.status === 409 || r.status === 422){
+      s.className = "bad"; s.textContent = "Alguien ha guardado otra versión mientras editabas. Copia tus cambios y recarga la página.";
+    } else if(r.status === 401){
+      s.className = "bad"; s.textContent = "La llave ha caducado. Tus cambios siguen aquí: crea otra llave en otra pestaña, pulsa Olvidar llave y vuelve a entrar.";
+    } else if(r.status === 403 || r.status === 404){
+      s.className = "bad"; s.textContent = "La llave no tiene permiso de escritura. Revisa que «Contents» esté en «Read and write».";
+    } else {
+      s.className = "bad"; s.textContent = `GitHub ha respondido con un error (${r.status}). Tus cambios siguen aquí: inténtalo de nuevo.`;
+    }
+  } catch(e) {
+    s.className = "bad"; s.textContent = "Sin conexión. Tus cambios siguen aquí: inténtalo de nuevo.";
+  } finally {
+    saving = false; $("save").disabled = false;
+  }
+}
+
+$("tokenForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const t = $("tokenInput").value.trim();
+  if(t) enterEdit(t); else showToken("Pega tu llave para continuar.");
+});
+$("tokenCancel").addEventListener("click", () => { $("tokenPanel").hidden = true; });
+$("editBtn").addEventListener("click", startEdit);
+$("save").addEventListener("click", save);
+$("exitEdit").addEventListener("click", exitEdit);
+$("logout").addEventListener("click", () => {
+  store.del(TOKEN_KEY);
+  $("saveStatus").className = "";
+  $("saveStatus").textContent = "Llave olvidada en este navegador. Al salir tendrás que pegar una para volver a editar.";
+});
+window.addEventListener("beforeunload", e => { if(dirty){ e.preventDefault(); e.returnValue = ""; } });
+window.addEventListener("hashchange", () => { if(location.hash === "#editar" && !editing){ $("editBtn").hidden = false; startEdit(); } });
+
+// ---------- Arranque ----------
+async function loadData(){
+  try {
+    const r = await fetch(`datos.json?t=${Date.now()}`, {cache:"no-store"});
+    if(!r.ok) throw new Error(r.status);
+    data = await r.json();
+    render();
+  } catch(e) {
+    $("main").innerHTML = `<p class="err">No se ha podido cargar el guion. Comprueba la conexión y recarga la página.</p>`;
+    return;
+  }
+  const h = location.hash.slice(1);
+  if(h && h !== "editar" && $(h)) $(h).scrollIntoView();
+}
+
+// El botón de editar solo se ve con #editar en el enlace o con la llave ya guardada
+$("editBtn").hidden = !(location.hash === "#editar" || store.get(TOKEN_KEY));
+loadData().then(() => { if(location.hash === "#editar") startEdit(); });
 </script>
 </body>
 </html>
