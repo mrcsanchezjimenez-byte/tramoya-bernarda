@@ -5,18 +5,80 @@
     "nota": "* La hoja escribe «04» con doble prima para La tarara, a diferencia de los minutos del resto de cambios. Se mantiene esa lectura (segundos) sin convertirla a cuatro minutos. Los tiempos son los de la hoja, no tiempos de movimiento calculados."
   },
   "order": [
-    { "tag": "1º", "what": "Duelo", "time": "28 min", "to": "a1" },
-    { "tag": "Tramoya", "what": "La tarara", "time": "04 seg*", "to": "c1", "chg": true },
-    { "tag": "2º", "what": "Cosen · Anda jaleo", "time": "15 min", "to": "a2" },
-    { "tag": "Descanso", "what": "Telón y descanso", "to": "c2", "chg": true },
-    { "tag": "3º", "what": "Las rejas · Herida de amor", "time": "4 min", "to": "a34" },
-    { "tag": "4º", "what": "El retrato", "time": "14 min", "to": "a34" },
-    { "tag": "Tramoya", "what": "Nana del caballo grande (El lagarto)", "time": "4 min", "to": "c3", "chg": true },
-    { "tag": "5º", "what": "Cena", "time": "11 min", "to": "a5" },
-    { "tag": "Tramoya", "what": "Romance de la luna luna", "time": "4 min", "to": "c4", "chg": true },
-    { "tag": "6º", "what": "Disparo", "time": "15 min", "to": "a678" },
-    { "tag": "7º", "what": "Coreografía · Verde que te quiero verde", "time": "5 min", "to": "a678" },
-    { "tag": "8º", "what": "Telón y saludo · La leyenda del viento", "to": "a678" }
+    {
+      "tag": "1º",
+      "what": "Duelo",
+      "time": "28 min",
+      "to": "a1"
+    },
+    {
+      "tag": "Tramoya",
+      "what": "La tarara",
+      "time": "04 min",
+      "to": "c1",
+      "chg": true
+    },
+    {
+      "tag": "2º",
+      "what": "Cosen · Anda jaleo",
+      "time": "15 min",
+      "to": "a2"
+    },
+    {
+      "tag": "Descanso",
+      "what": "Telón y descanso",
+      "to": "c2",
+      "chg": true
+    },
+    {
+      "tag": "3º",
+      "what": "Las rejas · Herida de amor",
+      "time": "4 min",
+      "to": "a34"
+    },
+    {
+      "tag": "4º",
+      "what": "El retrato",
+      "time": "14 min",
+      "to": "a34"
+    },
+    {
+      "tag": "Tramoya",
+      "what": "Nana del caballo grande (El lagarto)",
+      "time": "4 min",
+      "to": "c3",
+      "chg": true
+    },
+    {
+      "tag": "5º",
+      "what": "Cena",
+      "time": "11 min",
+      "to": "a5"
+    },
+    {
+      "tag": "Tramoya",
+      "what": "Romance de la luna luna",
+      "time": "4 min",
+      "to": "c4",
+      "chg": true
+    },
+    {
+      "tag": "6º",
+      "what": "Disparo",
+      "time": "15 min",
+      "to": "a678"
+    },
+    {
+      "tag": "7º",
+      "what": "Coreografía · Verde que te quiero verde",
+      "time": "5 min",
+      "to": "a678"
+    },
+    {
+      "tag": "8º",
+      "what": "Telón y saludo · La leyenda del viento",
+      "to": "a678"
+    }
   ],
   "acts": [
     {
@@ -39,7 +101,12 @@
         {
           "h": "Referencias de escena",
           "escena": "Abanicos; maltrato a Angustias; «Suave dulzarrona»; Bernarda / Poncia; Martirio / Amelia / Magdalena; entra Adela; María Josefa.",
-          "lanz": ["Campanas", "Golpes", "Abaniqueo", "Se cae el cubo"]
+          "lanz": [
+            "Campanas",
+            "Golpes",
+            "Abaniqueo",
+            "Se cae el cubo"
+          ]
         }
       ],
       "change": {
@@ -76,7 +143,12 @@
           "h": "Referencias de escena",
           "music": "Anda jaleo",
           "escena": "Todas; Poncia / Adela / Martirio.",
-          "lanz": ["Almirez", "Botella de anís", "Pandereta", "Cascabeles"]
+          "lanz": [
+            "Almirez",
+            "Botella de anís",
+            "Pandereta",
+            "Cascabeles"
+          ]
         }
       ],
       "change": {
@@ -108,7 +180,10 @@
             "Retirar todos los demás elementos del espacio de juego."
           ]
         },
-        { "h": "Acto 3 · Las rejas · 4 min", "music": "Herida de amor" },
+        {
+          "h": "Acto 3 · Las rejas · 4 min",
+          "music": "Herida de amor"
+        },
         {
           "h": "Acto 4 · El retrato · 14 min",
           "escena": "Martirio / Amelia; entra Bernarda; los velos; maltrato a Martirio; Bernarda / Poncia; cotilleo."
@@ -120,7 +195,7 @@
         "title": "Nana del caballo grande (El lagarto)",
         "time": "4 min",
         "check": [
-          "Retirar las 2 rejas, las 2 camas y las 2 sillas. Recoger los abanicos.",
+          "Retirar las 2 rejas y las 2 camas. Recoger los abanicos.",
           "Montar la cena con la mesa, su ajuar, el ventanal y las sillas."
         ]
       }
@@ -139,11 +214,15 @@
             "Colocar el ventanal indicado en la hoja.",
             "Colocar 6 sillas en la mesa: 4 enfrente y 2 que presiden.",
             "Añadir la silla gris extra: mirando de frente el escenario, a la derecha y un poco más cerca del público que la mesa.",
-            "Bernarda se sienta en la mesa, no en la silla gris. Su sitio es el segundo por la derecha, mirando de frente."
+            "Bernarda se sienta en la mesa, no en la silla gris. Su sitio es el segundo por la derecha, mirando de frente al público",
+            "La mesa está servida. Están en los postres ya"
           ],
           "count": "Recuento: 6 sillas de la mesa + 1 silla gris extra = 7 sillas"
         },
-        { "h": "Referencias de escena", "escena": "«Estética Leonardo da Vinci»; Poncia / Criada." }
+        {
+          "h": "Referencias de escena",
+          "escena": "«Estética Leonardo da Vinci»; Poncia / Criada."
+        }
       ],
       "change": {
         "id": "c4",
@@ -169,14 +248,26 @@
           "h": "Acto 6 · Disparo · 15 min",
           "text": "Montaje: sin atrezzo y sin banco.",
           "escena": "María Josefa; Martirio / Adela.",
-          "lanz": ["Disparo"]
+          "lanz": [
+            "Disparo"
+          ],
+          "check": [
+            "Escopeta preparada para Bernarda"
+          ]
         },
         {
           "h": "Acto 7 · Coreografía · 5 min",
           "music": "Verde que te quiero verde",
-          "check": ["Colocar el caballo para este acto.", "Retirar el caballo al finalizar el acto."]
+          "check": [
+            "Colocar el caballo para este acto.",
+            "Retirar el caballo al finalizar el acto."
+          ]
         },
-        { "h": "Acto 8 · Telón y saludo", "music": "La leyenda del viento", "text": "Montaje: no hay atrezzo." }
+        {
+          "h": "Acto 8 · Telón y saludo",
+          "music": "La leyenda del viento",
+          "text": "Montaje: no hay atrezzo."
+        }
       ]
     }
   ]
